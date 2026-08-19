@@ -1,4 +1,5 @@
 from pygame import *
+from random import *
 
 # clase padre para otros objetos
 class GameSprite(sprite.Sprite):
@@ -24,45 +25,76 @@ class Player(GameSprite):
     def update_L(self):
         keys = key.get_pressed()
 
-        if keys[K_W] and self.rect.x > 5:
-            self.rect.x -= self.speed
+        if keys[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
 
-        if keys[K_S] and self.rect.x < 620:
-            self.rect.x += self.speed
+        if keys[K_s] and self.rect.y < 370:
+            self.rect.y += self.speed
 
     def update_R(self):
         keys = key.get_pressed()
 
-        if keys[K_LEFT] and self.rect.x > 5:
-            self.rect.x -= self.speed
+        if keys[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
 
-        if keys[K_RIGHT] and self.rect.x < 620:
-            self.rect.x += self.speed
+        if keys[K_DOWN] and self.rect.y < 370:
+            self.rect.y += self.speed
 
-class Enemy(GameSprite):
-    def update(self):
-        global fallos
-        self.rect.y += self.speed
-        if self.rect.y > 500:
-            self.rect.x = randint(100,600)
-            self.rect.y = 0
-            fallos += 1
 
-player1 = Player('racket.png',300,400,70,100,10)
-player2 = Player('racket.png',300,400,70,100,10)
-ball = Enemy('ball.png',300,400,70,100,10)
+
+player1 = Player('racket.png',10,200,40,150,10)
+player2 = Player('racket.png',650,200,40,150,10)
+ball = Player('ball.png',300,100,70,70,10)
 
 window = display.set_mode((700,500))
 display.set_caption('Ping-Pong')
 window.fill((95, 172, 191))
 
 game = True
+finish = False
 clock = time.Clock()
+
+speed_x = 3
+speed_y = 3
+
+font.init()
+font = font.Font(None, 50)
+perdiste1 = font.render('Jugador 1 perdio',True,(0,0,0))
+perdiste2 = font.render('Jugador 2 perdio',True,(0,0,0))
+
 
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
+
+    if not finish:
+        window.fill((95, 172, 191))
+        #movimiento de plataforma
+        player2.update_R()
+        player1.update_L()
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        ball.reset()
+        player1.reset()
+        player2.reset()
+
+        if sprite.collide_rect(player1,ball) or sprite.collide_rect(player2,ball):
+            speed_x *= -1
+            speed_y *= -1
+
+        if ball.rect.y > 450 or ball.rect.y < 0:
+            speed_y *= -1
+
+        if ball.rect.x < 0:
+            window.blit(perdiste1,(200,200))
+            finish = True
+
+        if ball.rect.x > 700:
+            window.blit(perdiste2,(200,200))
+            finish = True
+
 
     display.update()
     clock.tick(60)
