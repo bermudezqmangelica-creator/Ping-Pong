@@ -54,13 +54,17 @@ game = True
 finish = False
 clock = time.Clock()
 
+puntos1 = 0
+puntos2 = 0
+
 speed_x = 3
 speed_y = 3
 
 font.init()
-font = font.Font(None, 50)
-perdiste1 = font.render('Jugador 1 perdio',True,(0,0,0))
-perdiste2 = font.render('Jugador 2 perdio',True,(0,0,0))
+font1 = font.Font(None, 50)
+font2 = font.Font(None, 40)
+perdiste1 = font1.render('Jugador 1 perdio',True,(0,0,0))
+perdiste2 = font1.render('Jugador 2 perdio',True,(0,0,0))
 
 
 while game:
@@ -84,16 +88,34 @@ while game:
             speed_x *= -1
             speed_y *= -1
 
+
         if ball.rect.y > 450 or ball.rect.y < 0:
             speed_y *= -1
 
         if ball.rect.x < 0:
+            puntos1 += 1
+            ball.rect.x = 300
+            ball.rect.y = 100
+            ball.reset()
+
+        if ball.rect.x == 699:
+            puntos2 += 1
+            ball.rect.x = 300
+            ball.rect.y = 100
+            ball.reset()
+
+        if puntos1 == 3:
             window.blit(perdiste1,(200,200))
             finish = True
-
-        if ball.rect.x > 700:
+        
+        if puntos2 == 3:
             window.blit(perdiste2,(200,200))
             finish = True
+
+        point1 = font2.render('puntos player 1: '+str(puntos2),True,(255,255,255))
+        window.blit(point1,(5,80))
+        point2 = font2.render('puntos player 2: '+str(puntos1),True,(255,255,255))
+        window.blit(point2,(5,40))
 
 
     display.update()
