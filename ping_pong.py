@@ -28,7 +28,7 @@ class Player(GameSprite):
         if keys[K_w] and self.rect.y > 5:
             self.rect.y -= self.speed
 
-        if keys[K_s] and self.rect.y < 370:
+        if keys[K_s] and self.rect.y < 350:
             self.rect.y += self.speed
 
     def update_R(self):
@@ -37,7 +37,7 @@ class Player(GameSprite):
         if keys[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
 
-        if keys[K_DOWN] and self.rect.y < 370:
+        if keys[K_DOWN] and self.rect.y < 350:
             self.rect.y += self.speed
 
 
@@ -48,7 +48,7 @@ ball = Player('ball.png',300,100,70,70,10)
 
 window = display.set_mode((700,500))
 display.set_caption('Ping-Pong')
-window.fill((95, 172, 191))
+window.fill((161, 217, 242))
 
 game = True
 finish = False
@@ -69,7 +69,7 @@ while game:
             game = False
 
     if not finish:
-        window.fill((95, 172, 191))
+        window.fill((161, 217, 242))
         #movimiento de plataforma
         player2.update_R()
         player1.update_L()
